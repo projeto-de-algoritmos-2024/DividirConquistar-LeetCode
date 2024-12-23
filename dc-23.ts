@@ -34,14 +34,27 @@ function mergeTwoLists(
   return dummy.next;
 }
 
+/**
+ * Mescla k listas encadeadas, mesclando-as em pares a cada iteração,
+ * até sobrar apenas uma lista final.
+ */
 function mergeKLists(lists: Array<ListNode | null>): ListNode | null {
   if (lists.length === 0) return null;
 
-  let mergedList = lists[0];
+  while (lists.length > 1) {
+    const mergedLists: Array<ListNode | null> = [];
 
-  for (let i = 1; i < lists.length; i++) {
-    mergedList = mergeTwoLists(mergedList, lists[i]);
+    // Mescla as listas em pares
+    for (let i = 0; i < lists.length; i += 2) {
+      const l1 = lists[i];
+      const l2 = i + 1 < lists.length ? lists[i + 1] : null;
+      const merged = mergeTwoLists(l1, l2);
+      mergedLists.push(merged);
+    }
+
+    // Atualiza `lists` com as listas resultantes, reduzindo-as pela metade
+    lists = mergedLists;
   }
 
-  return mergedList;
+  return lists[0];
 }
