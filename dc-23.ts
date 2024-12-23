@@ -9,33 +9,39 @@ class ListNode {
   }
 }
 
-function mergeKLists(lists: Array<ListNode | null>): ListNode | null {
-  // Array para acumular todos os valores das listas
-  const allValues: number[] = [];
+function mergeTwoLists(
+  l1: ListNode | null,
+  l2: ListNode | null
+): ListNode | null {
+  if (!l1) return l2;
+  if (!l2) return l1;
 
-  // Percorre cada lista e adiciona os valores no array
-  for (const list of lists) {
-    let current = list;
-    while (current) {
-      allValues.push(current.val);
-      current = current.next;
+  const dummy = new ListNode();
+  let current = dummy;
+
+  while (l1 && l2) {
+    if (l1.val <= l2.val) {
+      current.next = l1;
+      l1 = l1.next;
+    } else {
+      current.next = l2;
+      l2 = l2.next;
     }
-  }
-
-  // Se não houver nenhum valor, retorna null
-  if (allValues.length === 0) return null;
-
-  // Ordena todos os valores
-  allValues.sort((a, b) => a - b);
-
-  // Reconstrói a lista encadeada a partir do array ordenado
-  const dummyHead = new ListNode();
-  let current = dummyHead;
-  for (const val of allValues) {
-    current.next = new ListNode(val);
     current = current.next;
   }
 
-  // Retorna a cabeça da lista resultante
-  return dummyHead.next;
+  current.next = l1 ? l1 : l2;
+  return dummy.next;
+}
+
+function mergeKLists(lists: Array<ListNode | null>): ListNode | null {
+  if (lists.length === 0) return null;
+
+  let mergedList = lists[0];
+
+  for (let i = 1; i < lists.length; i++) {
+    mergedList = mergeTwoLists(mergedList, lists[i]);
+  }
+
+  return mergedList;
 }
