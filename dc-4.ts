@@ -1,10 +1,9 @@
-function findMedianSortedArraysAlmost(
-  nums1: number[],
-  nums2: number[]
-): number {
-  // Tentar garantir que nums1 seja sempre o menor array:
+// Leetcode Divide and Conquer: #4 - Median of Two Sorted Arrays
+
+function findMedianSortedArrays(nums1: number[], nums2: number[]): number {
+  // Passo 1: Garantir que nums1 seja o menor array
   if (nums1.length > nums2.length) {
-    return findMedianSortedArraysAlmost(nums2, nums1);
+    return findMedianSortedArrays(nums2, nums1);
   }
 
   const m = nums1.length;
@@ -14,30 +13,40 @@ function findMedianSortedArraysAlmost(
   let right = m;
 
   while (left <= right) {
-    // Faz a partição em nums1
+    // Partição em nums1
     const i = Math.floor((left + right) / 2);
-    // Tenta calcular a partição em nums2
-    const j = Math.floor((m + n) / 2) - i;
+    // Partição em nums2
+    const j = Math.floor((m + n + 1) / 2) - i;
 
-    const left1 = nums1[i - 1];
-    const right1 = nums1[i];
-    const left2 = nums2[j - 1];
-    const right2 = nums2[j];
+    // left1 = maior valor da esquerda de nums1
+    const left1 = i === 0 ? Number.NEGATIVE_INFINITY : nums1[i - 1];
+    // right1 = menor valor da direita de nums1
+    const right1 = i === m ? Number.POSITIVE_INFINITY : nums1[i];
 
+    // left2 = maior valor da esquerda de nums2
+    const left2 = j === 0 ? Number.NEGATIVE_INFINITY : nums2[j - 1];
+    // right2 = menor valor da direita de nums2
+    const right2 = j === n ? Number.POSITIVE_INFINITY : nums2[j];
+
+    // Conferir se as partições formaram uma separação válida
     if (left1 <= right2 && left2 <= right1) {
-      if ((m + n) % 2 === 0) {
+      // Achamos a partição correta
+      const totalLength = m + n;
+      if (totalLength % 2 === 0) {
+        // Par: média entre max das esquerdas e min das direitas
         return (Math.max(left1, left2) + Math.min(right1, right2)) / 2;
       } else {
+        // Ímpar: o mediano é o max das esquerdas
         return Math.max(left1, left2);
       }
     } else if (left1 > right2) {
-      // Mover partição para a esquerda
+      // Precisamos mover a fronteira de i para esquerda
       right = i - 1;
     } else {
-      // Mover partição para a direita
+      // left2 > right1, então movemos a fronteira de i para direita
       left = i + 1;
     }
   }
 
-  return -1;
+  throw new Error("Erro inesperado");
 }
