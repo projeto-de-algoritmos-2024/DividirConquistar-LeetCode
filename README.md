@@ -43,3 +43,7 @@ npm run start
 
 ## Uso 
 Para aplicar os casos de teste (in e out), basta acessar o link referente ao exercício no LeetCode e inserí-los no prompt de comando, também é possível gerar novos casos de teste, desde que cumpram os requisitos do exercício em questão.
+
+## Apresentação
+
+[Link para o vídeo de apresentação](https://youtu.be/9vdH5ZpOxGo)
